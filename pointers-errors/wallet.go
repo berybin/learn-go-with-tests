@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 // type Wallet struct {
 // 	balance int
@@ -36,6 +39,13 @@ func (w *Wallet) Balance() Bitcoin {
 	return w.balance
 }
 
-func (w *Wallet) Withdraw(amount Bitcoin) {
+func (w *Wallet) Withdraw(amount Bitcoin) error {
+	if amount > w.balance {
+		return ErrInsufficientFunds
+	}
+
 	w.balance -= amount
+	return nil
 }
+
+var ErrInsufficientFunds = errors.New("cannot withdraw, insufficient funds")
